@@ -8,37 +8,41 @@
  */
 /**
  * @param {TreeNode} root
- * @return {number[]}
+ * @return {number[][]}
  */
-
-
-
-var preorderTraversal = function(root) {
+var levelOrder = function(root) {
     if(!root){
         return []
     }
-    const arr = []
-    function pre(node){
-        if(node.left === null && node.right === null){
-            arr.push(node.val)
-            return
+    const queue = []
+    const resArr = []
+    let childArr = []
+    queue.push(root)
+    let queueSize = 1
+    let shiftCnt = 0
+
+    while (queue.length !== 0){
+        
+        let nowNode = queue.shift()
+        childArr.push(nowNode.val)
+        shiftCnt ++;
+
+        if(nowNode.left){
+            queue.push(nowNode.left)
         }
-        arr.push(node.val)
-        if(node.left !== null){
-            pre(node.left)
+        if(nowNode.right){
+            queue.push(nowNode.right)
         }
-        if(node.right !== null){
-            pre(node.right)
+
+        if(shiftCnt === queueSize){
+            queueSize = queue.length
+            shiftCnt = 0
+            resArr.push(childArr)
+            childArr = []
         }
     }
-    pre(root)
-    return arr
+    return resArr
 };
-
-
-
-
-
 
 
 
@@ -73,4 +77,4 @@ const binaryTree = {
     }
 }
 
-console.log(preorderTraversal(binaryTree));
+console.log(levelOrder(binaryTree));
